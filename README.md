@@ -2,35 +2,45 @@
 
 Descripción
 
-Este repositorio contiene el proyecto "ProyectoTaller". Añade aquí una descripción breve del propósito del proyecto, su alcance y los objetivos principales.
+ProyectoTaller es una aplicación web desarrollada con Django para la gestión de citas de clientes en talleres automotrices. El propósito de este proyecto es servir como trabajo práctico y apoyo para la defensa del proyecto de la carrera, demostrando diseño, implementación e integración de una solución informática completa para la gestión de un taller.
+
+Objetivos principales
+
+- Permitir a administradores y personal del taller gestionar citas de clientes (crear, modificar, cancelar).
+- Mantener un registro de clientes, vehículos y servicios solicitados.
+- Facilitar la asignación de turnos y la organización del taller.
+- Proveer una interfaz web y una API REST básica para integraciones futuras.
 
 Características
 
-- Lista de características principales del proyecto.
-- Funcionalidad 1
-- Funcionalidad 2
+- Gestión de clientes (alta, edición, baja).
+- Registro de vehículos asociados a clientes.
+- Creación y gestión de citas (fecha, hora, servicio, mecánico asignado).
+- Panel de administración (Django admin) para la gestión completa.
+- API REST para operaciones básicas (Django REST Framework).
+- Exportación básica a Excel (si aplica) y funcionalidades de reporte.
 
 Tecnologías
 
-Indica las tecnologías y versiones usadas (editarlas según corresponda):
-
-- Lenguaje: (ej. JavaScript/TypeScript, Python, Java, C#)
-- Frameworks/Bibliotecas: (ej. Node.js, React, Django)
-- Base de datos: (ej. PostgreSQL, MySQL, MongoDB)
+- Lenguaje: Python 3.10+
+- Framework backend: Django 5.2.8
+- API: Django REST Framework 3.16.1
+- Frontend: HTML / CSS / JavaScript (plantillas Django)
+- Base de datos por defecto: SQLite (soporte opcional para MySQL/MariaDB)
+- Dependencias principales: ver `requirements.txt`
 
 Requisitos previos
 
-Asegúrate de tener instaladas las herramientas necesarias, por ejemplo:
+Asegúrate de tener instaladas las herramientas necesarias:
 
 ```
 Git >= 2.0
-Node.js >= 14 (si aplica)
-Python >= 3.8 (si aplica)
+Python 3.10+
+pip
+virtualenv (opcional)
 ```
 
-Instalación
-
-Sigue estos pasos para levantar el proyecto localmente:
+Instalación y ejecución (desarrollo)
 
 1. Clona el repositorio:
 
@@ -39,69 +49,104 @@ git clone https://github.com/ChistianAguilar/ProyectoTaller.git
 cd ProyectoTaller
 ```
 
-2. Instala dependencias (ajusta según la tecnología):
-
-- Node.js / npm/yarn:
-
-```
-npm install
-# o
-# yarn install
-```
-
-- Python / pip:
+2. Crea y activa un entorno virtual:
 
 ```
 python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
+# Linux / macOS
+source venv/bin/activate
+# Windows (PowerShell)
+venv\Scripts\Activate.ps1
+# Windows (cmd)
+venv\Scripts\activate.bat
+```
+
+3. Instala dependencias:
+
+```
 pip install -r requirements.txt
 ```
 
-Uso
+4. Configura variables de entorno (opcional)
 
-Explica cómo ejecutar la aplicación y ejemplos de comandos:
-
-- Para desarrollo (ejemplo Node.js):
+Crea un archivo `.env` (o configura variables en el entorno) con al menos estas variables si usas base de datos externa o deseas ocultar la clave secreta:
 
 ```
-npm run dev
+SECRET_KEY=tu_clave_secreta
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
+DATABASE_URL=sqlite:///db.sqlite3  # o configuración para MySQL/Postgres
 ```
 
-- Para pruebas:
+5. Aplica migraciones y crea usuario administrador:
 
 ```
-npm test
-# o
-# pytest
+python manage.py migrate
+python manage.py createsuperuser
 ```
 
-Estructura del repositorio
+6. Ejecuta la aplicación en modo desarrollo:
 
-Describe brevemente las carpetas y archivos más importantes:
+```
+python manage.py runserver
+```
 
-- /src o /app - Código fuente
-- /tests - Pruebas automatizadas
-- /docs - Documentación adicional
+Accede a:
+- Aplicación: http://127.0.0.1:8000
+- Panel administrativo: http://127.0.0.1:8000/admin/
+
+Base de datos
+
+- Por defecto el proyecto usa SQLite (`db.sqlite3`).
+- Para MySQL/MariaDB instala la dependencia opcional (por ejemplo `mysqlclient`) y configura `DATABASES` o `DATABASE_URL`. Revisa `requirements-optional.txt`.
+
+Ejecución de pruebas
+
+Ejecuta las pruebas automatizadas con:
+
+```
+python manage.py test
+```
+
+Estructura del repositorio (resumen)
+
+- `taller_mecanico/` - Código principal del proyecto Django (apps, modelos, vistas, urls, etc.)
+- `requirements.txt` - Dependencias principales (Django, DRF, etc.)
+- `requirements-optional.txt` - Dependencias opcionales (MySQL, herramientas extra)
+- `ieee830.md` - Especificación de requisitos
+- `ROLES_USUARIOS.md` - Descripción de roles y permisos
+- `README.md` - Este archivo
+
+API (ejemplos)
+
+El proyecto incluye una API REST básica usando Django REST Framework. Rutas de ejemplo (ajusta según `urls.py` del proyecto):
+
+- Listar/crear clientes: GET/POST `/api/clientes/`
+- Detalle/editar/eliminar cliente: GET/PUT/PATCH/DELETE `/api/clientes/{id}/`
+- Listar/crear vehículos: GET/POST `/api/vehiculos/`
+- Listar/crear citas: GET/POST `/api/citas/`
+- Filtrar citas por fecha/cliente/estado: `/api/citas/?fecha=2026-02-01&cliente=3`
+
+(Revisa `taller_mecanico/urls.py` y las vistas/serializers para rutas concretas.)
+
+Despliegue (recomendaciones)
+
+Para un entorno de producción:
+
+- Desactiva `DEBUG` y configura `ALLOWED_HOSTS`.
+- Usa una base de datos robusta (Postgres o MySQL).
+- Sirve archivos estáticos con WhiteNoise o mediante Nginx.
+- Usa un WSGI/ASGI server (Gunicorn/uvicorn).
+- Configura variables sensibles vía entorno (SECRET_KEY, DB credentials).
+- Considera usar un servicio de CI/CD y backups de base de datos.
 
 Contribuir
 
-Si quieres contribuir, crea un fork y abre un pull request. Puedes seguir estos pasos:
+Si quieres colaborar: crea un fork, abre una rama con tu feature/fix y realiza un Pull Request.
 
-1. Fork del repositorio
-2. Crea una rama: `git checkout -b feature/nueva-funcionalidad`
-3. Haz commit de tus cambios
-4. Abre un Pull Request describiendo los cambios
-
-Licencia
-
-Indica la licencia del proyecto aquí (ej. MIT). Si no has decidido aún, añade -- AÑADIR LICENCIA --.
-
-Contacto
-
-Para dudas o soporte, contacta a: <tu-email@ejemplo.com>
-
-Notas finales
-
-- Actualiza este README con instrucciones específicas del proyecto (comandos, configuración, variables de entorno, etc.).
-- Si quieres, dime detalles del proyecto (lenguaje, cómo se inicia, dependencias) y adapto el README a tu proyecto.
+```
+git checkout -b feature/mi-cambio
+# realiza cambios
+git commit -m "Descripción del cambio"
+git push origin feature/mi-cambio
+```
