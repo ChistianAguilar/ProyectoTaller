@@ -3,7 +3,7 @@ Django==5.2.8
 djangorestframework==3.16.1
 et_xmlfile==2.0.0
 openpyxl==3.1.5
-sqlparse==0.5.3
+sqlparse==0.5.4
 xlsxwriter==3.2.9
 
 # MySQL/MariaDB support (opcional - ver requirements-optional.txt)
